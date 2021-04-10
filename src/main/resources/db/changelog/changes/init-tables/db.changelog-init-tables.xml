@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="init_tables" author="salkaevruslan">
+        <createTable tableName="templates">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="nvarchar(MAX)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="template" type="nvarchar(MAX)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="recipients">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="nvarchar(MAX)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="template_targets">
+            <column name="template_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_template_id" references="templates(id)"/>
+            </column>
+            <column name="recipient_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_recipient" references="recipients(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="template_targets"/>
+            <dropTable tableName="recipients"/>
+            <dropTable tableName="templates"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
